@@ -1,0 +1,54 @@
+name: release
+
+on:
+  # pushing a tag like v1.0.0 releases it
+  push:
+    tags: ["v*"]
+  # or run it by hand from the Actions tab, naming the tag to create
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag, e.g. v1.0.0"
+        required: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: build and release (web)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      # a wrapper committed from Windows loses its executable bit
+      - run: chmod +x gradlew
+
+      - name: Build the production web app
+        run: ./gradlew :composeApp:wasmJsBrowserDistribution
+
+      - name: Zip it
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          cd composeApp/build/dist/wasmJs/productionExecutable
+          zip -r "$GITHUB_WORKSPACE/out/compose-dos-portfolio-${TAG}-web.zip" .
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" out/*.zip \
+            --title "$TAG" \
+            --target "$GITHUB_SHA" \
+            --generate-notes

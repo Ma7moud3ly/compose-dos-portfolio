@@ -1,0 +1,33 @@
+name: build
+
+on:
+  # pull requests build the web and desktop apps
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: debug (web, desktop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      # a wrapper committed from Windows loses its executable bit
+      - run: chmod +x gradlew
+
+      - name: Build
+        run: ./gradlew :composeApp:wasmJsBrowserDevelopmentExecutableDistribution :composeApp:jvmJar
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-debug
+          path: composeApp/build/dist/wasmJs/developmentExecutable/
+          if-no-files-found: error

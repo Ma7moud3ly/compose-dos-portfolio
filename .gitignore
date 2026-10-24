@@ -1,0 +1,11 @@
+*.iml
+.idea
+.kotlin
+.gradle
+**/build/
+local.properties
+.DS_Store
+captures
+kotlin-js-store
+logo.png
+web
