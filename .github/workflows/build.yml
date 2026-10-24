@@ -3,7 +3,7 @@ name: build
 on:
   # pull requests build the web and desktop apps
   pull_request:
-    branches: [main]
+    branches: [master]
 
 concurrency:
   group: build-${{ github.ref }}

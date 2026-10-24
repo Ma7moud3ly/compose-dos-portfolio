@@ -28,8 +28,9 @@ An old-school DOS-style portfolio, built with Kotlin and Compose Multiplatform.
 3. Add any letter of your name that is missing from `Glyphs` in
    [`BlockTitle.kt`](composeApp/src/commonMain/kotlin/ma7moud3ly/github/io/ui/components/BlockTitle.kt).
    Each letter is five rows of `█`.
-4. Set the page title and description in
-   [`index.html`](composeApp/src/wasmJsMain/resources/index.html).
+4. Set the page title, description and structured data in
+   [`index.html`](composeApp/src/wasmJsMain/resources/index.html), and replace the
+   `google-site-verification` tag with your own from Google Search Console, or remove it.
 5. Optionally, change the screen colors in
    [`Phosphor.kt`](composeApp/src/commonMain/kotlin/ma7moud3ly/github/io/ui/theme/Phosphor.kt).
 
