@@ -11,4 +11,7 @@ data class Publication(
     val year: String,
     val role: String,
     val url: String
-)
+) {
+    /** The paper's page, as a link. */
+    val link: Link get() = Link("Read paper", url)
+}

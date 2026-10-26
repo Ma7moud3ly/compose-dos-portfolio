@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ma7moud3ly.github.io.data.portfolio
 import ma7moud3ly.github.io.feature.portfolio.components.CommandOutput
 import ma7moud3ly.github.io.feature.portfolio.components.LinkButtons
@@ -46,10 +48,16 @@ fun AboutTab(profile: Profile, uiEvents: (PortfolioEvent) -> Unit) {
         Column {
             BlockTitle(profile.name)
             Spacer(Modifier.height(24.dp))
-            TypedText(text = "> ${profile.title}", color = phosphor.bright, bold = true)
-            TermText("  ${profile.tagline}", color = phosphor.dim)
-            Spacer(Modifier.height(14.dp))
-            TermText(profile.summary)
+            TypedText(
+                text = "> ${profile.title}",
+                fontSize = 20.sp,
+                color = phosphor.bright,
+                bold = true
+            )
+            Spacer(Modifier.height(4.dp))
+            TermText(profile.tagline, color = phosphor.dim)
+            Spacer(Modifier.height(16.dp))
+            TermText(profile.summary, textAlign = TextAlign.Justify)
             Spacer(Modifier.height(20.dp))
             profile.facts.forEach { Field(it.label, it.value) }
             Spacer(Modifier.height(20.dp))

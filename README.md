@@ -7,9 +7,9 @@ An old-school DOS-style portfolio, built with Kotlin and Compose Multiplatform.
 <img src="images/profile.gif" alt="A tour of the portfolio: the boot log, then the tabs" width="100%" />
 ## Features
 
-- The CRT switching on with static noise, then six tabs: About, Work, Apps, Books, Pubs and Stack
+- The CRT switching on with static noise, then five tabs: About, Stack, Apps, Books and Pubs
 - Amber and green screens, with scanlines and a phosphor glow
-- Keyboard control: `1`-`6` open a tab, `←` `→` switch tabs, `↑` `↓` pick an item,
+- Keyboard control: `1`-`5` open a tab, `←` `→` switch tabs, `↑` `↓` pick an item,
   `Enter` opens its link, `C` switches the color
 - Works on wide screens and phones
 - Runs in the browser (Kotlin/Wasm) and as a desktop app
@@ -24,7 +24,7 @@ An old-school DOS-style portfolio, built with Kotlin and Compose Multiplatform.
 
 2. Put your content in
    [`PortfolioData.kt`](composeApp/src/commonMain/kotlin/ma7moud3ly/github/io/data/PortfolioData.kt):
-   profile, jobs, apps, books, publications and skills.
+   profile, skills, apps, books and publications.
 3. Add any letter of your name that is missing from `Glyphs` in
    [`BlockTitle.kt`](composeApp/src/commonMain/kotlin/ma7moud3ly/github/io/ui/components/BlockTitle.kt).
    Each letter is five rows of `█`.

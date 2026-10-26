@@ -1,7 +1,6 @@
 package ma7moud3ly.github.io.data
 
 import ma7moud3ly.github.io.model.Fact
-import ma7moud3ly.github.io.model.Job
 import ma7moud3ly.github.io.model.Link
 import ma7moud3ly.github.io.model.Portfolio
 import ma7moud3ly.github.io.model.Profile
@@ -18,8 +17,8 @@ private const val EMAIL = "engma7moud3ly@gmail.com"
 /** The content of the portfolio. */
 val portfolio = Portfolio(
     profile = Profile(
-        name = "Mahmoud Aly Hassan",
-        title = "Software Engineer",
+        name = "Mahmoud Aly",
+        title = "Senior Software Engineer",
         tagline = "Android · Kotlin Multiplatform · Hardware & robotics",
         summary = "Software engineer with 8+ years of experience and an electrical & " +
                 "communications engineering background. I build Kotlin apps for Android, desktop " +
@@ -36,68 +35,6 @@ val portfolio = Portfolio(
         links = listOf(
             Link("GitHub", GITHUB),
             Link("LinkedIn", "https://www.linkedin.com/in/ma7moud3ly/")
-        )
-    ),
-    jobs = listOf(
-        Job(
-            company = "Powerly",
-            role = "Senior Software Engineer",
-            location = "Remote, London, UK",
-            period = "Dec 2023 - Present",
-            points = listOf(
-                "Led development of a production EV charging Android platform.",
-                "Designed and maintained a scalable multi-module architecture.",
-                "Integrated real-time communication with MQTT and WebSocket.",
-                "Implemented Stripe payments, Google Maps and Firebase services.",
-                "Worked with backend and hardware teams to integrate EV chargers and smart meters."
-            ),
-            links = listOf(
-                Link("Website", "https://www.powerly.app/"),
-                Link("GitHub", "https://github.com/powerly-ev/open-ev-charge-android-app")
-            )
-        ),
-        Job(
-            company = "Tekkura",
-            role = "Senior Software Engineer (part-time contract)",
-            location = "Remote",
-            period = "Jan 2026",
-            points = listOf(
-                "Led the Java-to-Kotlin migration of OIST's Smartphone Robot framework, keeping " +
-                        "Java API compatibility and thread safety.",
-                "Integrated ROS 2 into Android with a Kotlin rosbridge WebSocket client, and built " +
-                        "a Docker-based ROS 2 dev environment.",
-                "Moved robot control threading to coroutines and ran Python app logic with Chaquopy.",
-                "Modernized the Gradle build: Kotlin DSL, version catalogs, convention plugins."
-            ),
-            links = listOf(Link("GitHub", "https://github.com/oist/smartphone-robot-android"))
-        ),
-        Job(
-            company = "Gasable",
-            role = "Android Software Engineer",
-            location = "Remote, Saudi Arabia",
-            period = "Mar 2022 - Oct 2023",
-            points = listOf(
-                "Worked in a large cross-functional team on a gas delivery marketplace app " +
-                        "with 1M+ downloads.",
-                "Migrated legacy code from Java to Kotlin and Jetpack Compose.",
-                "Built modular features for orders, payments, maps, device scanning and notifications.",
-                "Integrated Amazon PayFort, Google Maps, Firebase, and GMS/HMS with product flavors."
-            ),
-            links = listOf(
-                Link("Website", "https://www.gasable.com/"),
-                Link("Google Play", "${PLAY}com.esttp.gasable")
-            )
-        ),
-        Job(
-            company = "Upwork",
-            role = "Senior Android Engineer (freelance)",
-            location = "Remote",
-            period = "Dec 2017 - Present",
-            points = listOf(
-                "Top Rated: 42 jobs and 3,000+ hours.",
-                "Delivered Android apps for clients in fintech, EV charging, IoT and healthcare."
-            ),
-            links = emptyList()
         )
     ),
     projects = listOf(

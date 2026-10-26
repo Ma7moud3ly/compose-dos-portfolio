@@ -42,9 +42,9 @@ class PortfolioViewModel(
     fun selectedLinks(): List<Link> {
         val index = state.selected(state.tab)
         val links = when (state.tab) {
-            Tab.Work -> portfolio.jobs.getOrNull(index)?.links
             Tab.Apps -> portfolio.projects.getOrNull(index)?.links
             Tab.Books -> portfolio.writings.getOrNull(index)?.links
+            Tab.Publications -> portfolio.publications.getOrNull(index)?.let { listOf(it.link) }
             else -> null
         }
         return links.orEmpty()
@@ -52,9 +52,9 @@ class PortfolioViewModel(
 
     /** How many items the list of [tab] has. Zero when it has no list. */
     private fun itemCount(tab: Tab): Int = when (tab) {
-        Tab.Work -> portfolio.jobs.size
         Tab.Apps -> portfolio.projects.size
         Tab.Books -> portfolio.writings.size
+        Tab.Publications -> portfolio.publications.size
         else -> 0
     }
 
