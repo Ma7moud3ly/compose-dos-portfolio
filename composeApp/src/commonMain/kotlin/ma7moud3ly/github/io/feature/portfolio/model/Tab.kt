@@ -8,11 +8,10 @@ package ma7moud3ly.github.io.feature.portfolio.model
  */
 enum class Tab(val label: String, val path: String) {
     About("ABOUT", "C:\\ABOUT"),
-    Work("WORK", "C:\\WORK"),
+    Stack("STACK", "C:\\STACK"),
     Apps("APPS", "C:\\APPS"),
     Books("BOOKS", "C:\\BOOKS"),
-    Publications("PUBS", "C:\\PUBS"),
-    Stack("STACK", "C:\\STACK");
+    Publications("PUBS", "C:\\PUBS");
 
     /** The number key that opens this tab. */
     val number: Int get() = ordinal + 1

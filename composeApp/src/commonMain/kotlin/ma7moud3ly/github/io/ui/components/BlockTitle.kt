@@ -1,29 +1,32 @@
 package ma7moud3ly.github.io.ui.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import ma7moud3ly.github.io.ui.theme.LocalPhosphor
 
-/** The width of a JetBrains Mono character, as a share of the font size, with a small margin. */
-private const val CHAR_WIDTH = 0.62f
+/** The smallest a pixel of a letter gets before words move to their own lines, in dp. */
+private const val MIN_PIXEL = 5f
 
-/** The smallest font size the letters are drawn at before words move to their own lines. */
-private const val MIN_FONT_SIZE = 8f
+/** The largest a pixel of a letter gets, in dp. */
+private const val MAX_PIXEL = 11f
 
-/** The largest font size the letters are drawn at. */
-private const val MAX_FONT_SIZE = 15f
+/** Rows of empty pixels between two lines of letters. */
+private const val LINE_GAP = 2
 
-/** The letters [BlockTitle] can draw, five rows each. */
+/** The rows each letter is drawn in. */
+private const val LETTER_ROWS = 5
+
+/** The letters [BlockTitle] can draw, five rows of five pixels each; `█` is a lit pixel. */
 private val Glyphs: Map<Char, List<String>> = mapOf(
     'A' to listOf(" ███ ", "█   █", "█████", "█   █", "█   █"),
     'D' to listOf("████ ", "█   █", "█   █", "█   █", "████ "),
@@ -41,7 +44,7 @@ private val Glyphs: Map<Char, List<String>> = mapOf(
 @Composable
 private fun BlockTitlePreviewWide() {
     TermPreview {
-        BlockTitle("Mahmoud Aly Hassan", Modifier.width(1100.dp))
+        BlockTitle("Mahmoud Aly", Modifier.width(1100.dp))
     }
 }
 
@@ -49,24 +52,19 @@ private fun BlockTitlePreviewWide() {
 @Composable
 private fun BlockTitlePreviewNarrow() {
     TermPreview {
-        BlockTitle("Mahmoud Aly Hassan", Modifier.width(340.dp))
+        BlockTitle("Mahmoud Aly", Modifier.width(300.dp))
     }
 }
 
-/** How many character columns [line] takes in block letters: five per letter and one between. */
+/** How many pixel columns [line] takes: five per letter and one between. */
 private fun columnsOf(line: String): Int = line.length * 6 - 1
 
-/** [line] in five rows of block letters. Letters with no glyph are left blank. */
-private fun blockLetters(line: String): String = (0 until 5).joinToString("\n") { row ->
-    line.map { Glyphs[it]?.get(row) ?: "     " }.joinToString(" ")
-}
-
 /**
- * Packs [words] into lines, as few as keep the letters at least
- * [MIN_FONT_SIZE] in [width] dp. A word wider than that gets a line of its own.
+ * Packs [words] into lines, as few as keep a pixel at least [MIN_PIXEL] dp
+ * in [width] dp. A word wider than that gets a line of its own.
  */
 private fun fitLines(words: List<String>, width: Float): List<String> {
-    val maxColumns = (width / (MIN_FONT_SIZE * CHAR_WIDTH)).toInt()
+    val maxColumns = (width / MIN_PIXEL).toInt()
     val lines = mutableListOf<String>()
     var line = ""
     words.forEach { word ->
@@ -83,9 +81,9 @@ private fun fitLines(words: List<String>, width: Float): List<String> {
 }
 
 /**
- * [text] in big block letters with a phosphor gradient. The words wrap onto
- * as many lines as they need, and the letters are sized to fill the width,
- * up to [MAX_FONT_SIZE].
+ * [text] in big pixel letters with a phosphor gradient and glow. The words
+ * wrap onto as many lines as they need, and the pixels are sized to fill
+ * the width, up to [MAX_PIXEL] dp.
  */
 @Composable
 fun BlockTitle(text: String, modifier: Modifier = Modifier) {
@@ -93,16 +91,41 @@ fun BlockTitle(text: String, modifier: Modifier = Modifier) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val lines = fitLines(text.uppercase().split(' '), maxWidth.value)
         val columns = lines.maxOf { columnsOf(it) }
-        val fontSize = (maxWidth.value / (columns * CHAR_WIDTH)).coerceAtMost(MAX_FONT_SIZE).sp
-        Text(
-            text = lines.joinToString("\n\n") { blockLetters(it) },
-            softWrap = false,
-            style = MaterialTheme.typography.bodyMedium.copy(
-                fontSize = fontSize,
-                lineHeight = fontSize * 1.05f,
-                brush = Brush.verticalGradient(listOf(phosphor.bright, phosphor.normal, phosphor.dim)),
-                shadow = Shadow(color = phosphor.normal.copy(alpha = 0.6f), blurRadius = 14f)
-            )
-        )
+        val pixel = (maxWidth / columns).coerceAtMost(MAX_PIXEL.dp)
+        val rows = lines.size * LETTER_ROWS + (lines.size - 1) * LINE_GAP
+        Canvas(Modifier.size(pixel * columns, pixel * rows)) {
+            val p = pixel.toPx()
+            // a thin dark seam between pixels, like the dots of a screen
+            val seam = p * 0.12f
+            val glow = p * 0.35f
+            lines.forEachIndexed { index, line ->
+                val top = index * (LETTER_ROWS + LINE_GAP) * p
+                val brush = Brush.verticalGradient(
+                    colors = listOf(phosphor.bright, phosphor.normal, phosphor.dim),
+                    startY = top,
+                    endY = top + LETTER_ROWS * p
+                )
+                line.forEachIndexed { letter, char ->
+                    val glyph = Glyphs[char] ?: return@forEachIndexed
+                    glyph.forEachIndexed { row, pixels ->
+                        pixels.forEachIndexed { column, lit ->
+                            if (lit != '█') return@forEachIndexed
+                            val x = (letter * 6 + column) * p
+                            val y = top + row * p
+                            drawRect(
+                                color = phosphor.normal.copy(alpha = 0.15f),
+                                topLeft = Offset(x - glow, y - glow),
+                                size = Size(p + 2 * glow, p + 2 * glow)
+                            )
+                            drawRect(
+                                brush = brush,
+                                topLeft = Offset(x + seam / 2, y + seam / 2),
+                                size = Size(p - seam, p - seam)
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

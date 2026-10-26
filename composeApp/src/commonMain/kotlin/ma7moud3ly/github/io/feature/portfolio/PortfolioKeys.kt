@@ -15,7 +15,7 @@ private val NumberKeys = listOf(Key.One, Key.Two, Key.Three, Key.Four, Key.Five,
  * The event this key press stands for, or null when the key does nothing.
  *
  * Until the screen is [booted], any key finishes the boot. After it:
- * - 1 to 6 open a tab, and the left and right arrows switch tabs
+ * - the number keys open a tab, and the left and right arrows switch tabs
  * - the up and down arrows move the pick of the open tab's list
  * - Enter opens the first link of the picked item
  * - C switches the screen color

@@ -7,7 +7,6 @@ package ma7moud3ly.github.io.model
  */
 data class Portfolio(
     val profile: Profile,
-    val jobs: List<Job>,
     val projects: List<Project>,
     val writings: List<Writing>,
     val publications: List<Publication>,

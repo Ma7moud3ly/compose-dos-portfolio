@@ -37,9 +37,9 @@ import ma7moud3ly.github.io.feature.portfolio.tabs.AppsTab
 import ma7moud3ly.github.io.feature.portfolio.tabs.BooksTab
 import ma7moud3ly.github.io.feature.portfolio.tabs.PublicationsTab
 import ma7moud3ly.github.io.feature.portfolio.tabs.StackTab
-import ma7moud3ly.github.io.feature.portfolio.tabs.WorkTab
 import ma7moud3ly.github.io.model.Portfolio
 import ma7moud3ly.github.io.ui.components.LocalTermFontSize
+import ma7moud3ly.github.io.ui.components.LocalTermGlow
 import ma7moud3ly.github.io.ui.components.TermWindow
 import ma7moud3ly.github.io.ui.components.crtScreen
 import ma7moud3ly.github.io.ui.theme.AppTheme
@@ -68,7 +68,7 @@ private fun PortfolioScreenPreviewApps() {
 @Preview(widthDp = 400, heightDp = 860)
 @Composable
 private fun PortfolioScreenPreviewCompact() {
-    ScreenPreview(Phosphors.Green, PortfolioState(booted = true, tab = Tab.Work))
+    ScreenPreview(Phosphors.Green, PortfolioState(booted = true, tab = Tab.Stack))
 }
 
 @Preview(widthDp = 800, heightDp = 500)
@@ -116,7 +116,10 @@ fun PortfolioScreenContent(
     ) {
         val compact = maxWidth < CompactWidth
         val gutter = if (compact) 10.dp else 28.dp
-        CompositionLocalProvider(LocalTermFontSize provides if (compact) 13.sp else 15.sp) {
+        CompositionLocalProvider(
+            LocalTermFontSize provides if (compact) 14.sp else 15.sp,
+            LocalTermGlow provides if (compact) 0.5f else 1f
+        ) {
             if (state.booted.not()) BootContent(
                 onFinished = { uiEvents(PortfolioEvent.FinishBoot) }
             ) else Column(
@@ -188,12 +191,7 @@ private fun TabContent(
             uiEvents = uiEvents
         )
 
-        Tab.Work -> WorkTab(
-            jobs = portfolio.jobs,
-            selected = selected,
-            compact = compact,
-            uiEvents = uiEvents
-        )
+        Tab.Stack -> StackTab(groups = portfolio.stack)
 
         Tab.Apps -> AppsTab(
             projects = portfolio.projects,
@@ -211,9 +209,9 @@ private fun TabContent(
 
         Tab.Publications -> PublicationsTab(
             publications = portfolio.publications,
+            selected = selected,
+            compact = compact,
             uiEvents = uiEvents
         )
-
-        Tab.Stack -> StackTab(groups = portfolio.stack)
     }
 }
